@@ -14,3 +14,4 @@ Customer1 = Customer("Oluwaseun Balogun", "sda@gmail.com")
 Customer2 = Customer("Jeremiah Joseph","sfda@yahoo.com")
 
 Customer1.welcome()
+Customer2.welcome()
