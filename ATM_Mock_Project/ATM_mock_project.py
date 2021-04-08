@@ -74,5 +74,3 @@ def atm():
         pass
 
 atm()
-
-
