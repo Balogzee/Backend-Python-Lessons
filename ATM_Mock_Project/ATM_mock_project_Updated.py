@@ -1,15 +1,3 @@
-#register
-# - first name, last name, password, email
-# - generaten user account
-
-
-#login
-# - account number & password
-
-
-#bank operations
-
-#Initializing the system
 import random
 import pickle
 import time
@@ -17,17 +5,17 @@ import time
 localtime = time.asctime(time.localtime(time.time()))
 
 class Bank():
+    """
+    This is a Bank class, which carries out banking transactions
+    """
+
     database = {"1000000000": {"first_name":"e","last_name":"e","email":"e","password":"e"}} #dictionary
     loaded_data = pickle.load(open("ATM_Mock_Project/Database.txt", "rb"))
     database = loaded_data
 
-    accountNumbers = database.keys()
-
-    
-    #userBalance = {"1000000000":20000}
     loaded_balance = pickle.load(open("ATM_Mock_Project/Balance.txt", "rb"))
     userBalance = loaded_balance
-    #complaint = {"1000000000":"Jesus"}
+    
     loaded_complaint = pickle.load(open("ATM_Mock_Project/Complaints.txt", "rb"))
     complaint = loaded_complaint
     
@@ -35,31 +23,44 @@ class Bank():
         pass
 
 
-
     def login(self):
+        number_of_attempts  = 1
+        while(number_of_attempts < 4):
+            print("********* Login ************")
+
+            self.accountNumber = input("What is your account number? \n")
+            self.password = input("What is your password \n")
         
-        print("********* Login ************")
+            if(self.accountNumber in self.database):
 
-        self.accountNumber = input("What is your account number? \n")
-        self.password = input("What is your password \n")
+                if(self.password == self.database[self.accountNumber]["password"]):
+                    self.bankOperation(self.database[self.accountNumber], self.accountNumber)
+                    number_of_attempts = 5
 
-        for Keys,Values in self.database.items():
-            
-            if(self.accountNumber == Keys):
-                if(self.password == Values["password"]):
-                    self.bankOperation(Values, self.accountNumber)
-                    return
                 else:
+                    print("****************************************")
                     print('Invalid account or password')
-                    self.login()
+                    print(f'Number of tries left: {3-number_of_attempts}')
+                    number_of_attempts += 1
+                    
             else:
+                print("****************************************")
+                print('Invalid account or password')
+                print(f'Number of tries left: {3-number_of_attempts}')
+                number_of_attempts += 1
                 pass
+        
+        if (number_of_attempts == 4):
+            time.sleep(1)
+            print("****************************************")
+            print("You have exceeded the number of tries")
+            wait = 1
+            while(wait <16):
+                print(f"Wait for {16-wait}secs") #15secs is used to test, time can be increased to 1min
+                time.sleep(1)
+                wait += 1
                 
                     
-        
-        
-
-
     def register(self):
 
         print("****** Register *******")
@@ -78,15 +79,20 @@ class Bank():
         pickle.dump(self.userBalance, open("ATM_Mock_Project/Balance.txt", "wb"))
         pickle.dump(self.complaint, open("ATM_Mock_Project/Complaints.txt", "wb"))
 
+        time.sleep(1)
         print("Your Account Has been created")
-        print(" == ==== ====== ===== ===")
+        print("****************************************")
         print("Your account number is: %s" % self.accountNumber)
         print("Make sure you keep it safe")
-        print(" == ==== ====== ===== ===")
+        print("Redirecting to login....................")
+        print("****************************************")
+        time.sleep(3)
 
         self.login()
 
+    
     def bankOperation(self, user, accountNumber):
+        print("****************************************")
 
         print("Welcome %s %s " % ( user["first_name"], user["last_name"] ) )
         
@@ -105,6 +111,7 @@ class Bank():
             depositAmount = int(input(":"))
             self.userBalance[accountNumber] += depositAmount
             print("****************************************")
+            time.sleep(1)
             print("Deposit completed".title())
             print("Balance: " + str(self.userBalance[accountNumber]))
             
@@ -113,10 +120,15 @@ class Bank():
             print("Withdarwal")
             print("How much would you like to withdraw?:".title())
             withdrawalAmount = int(input(":"))
-            self.userBalance[accountNumber] -= withdrawalAmount
-            print("****************************************")
-            print("Please Take your cash".title())
-            print("Balance: " + str(self.userBalance[accountNumber]))
+            if (withdrawalAmount < self.userBalance[accountNumber]):
+                self.userBalance[accountNumber] -= withdrawalAmount
+                print("****************************************")
+                time.sleep(1)
+                print("Please Take your cash".title())
+                print("Balance: " + str(self.userBalance[accountNumber]))
+            else:
+                print("****************************************")
+                print("Insufficient Funds!")
             
         elif(selectedOption == 3):
             print("****************************************")
@@ -125,6 +137,7 @@ class Bank():
             input_complaint = input(":")
             self.complaint[accountNumber] = input_complaint
             print("****************************************")
+            time.sleep(1)
             print("Complaint Issued\nThank you for contacting us")
             
         elif(selectedOption == 4):
@@ -136,19 +149,20 @@ class Bank():
             pickle.dump(self.complaint, open("ATM_Mock_Project/Complaints.txt", "wb"))
             exit()
         else:
-        
+            print("****************************************")
             print("Invalid option selected, please try again".title()) 
-        return
 
         
-
-
     def generationAccountNumber(self):
 
         return str(random.randrange(1000000000,9999999999))
 
+    
     def logout(self):
+        time.sleep(1)
         self.login()
+
+
 
 #### ACTUAL BANKING SYSTEM #####
 def atm():
@@ -158,6 +172,7 @@ def atm():
 
     new_session = Bank()
 
+    time.sleep(1)
     print("Welcome to bankPHP")
  
     haveAccount = int(input("Do you have account with us: 1 (yes) 2 (no) \n"))
@@ -169,21 +184,21 @@ def atm():
         
         new_session.register()
     else:
+        print("****************************************")
         print("You have selected invalid option")
         atm()
 
     anotherTransaction = True
     while(anotherTransaction):
+        time.sleep(1)
         print("****************************************")
         print("Do you want to process another transaction? Y/N".title())
         response = input(":")
         if(response == "Y" or response == "Yes" or response == "y"):
-            # values = new_session.database.get(new_session.accountNumber)
-            # print(values)
-            # new_session.bankOperation(values, new_session.accountNumber)
             new_session.login()
         else:
             anotherTransaction = False
+            time.sleep(1)
             print("****************************************")
             print("Thank you for banking with us".title())
             print("****************************************")
