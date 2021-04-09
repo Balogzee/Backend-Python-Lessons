@@ -64,10 +64,10 @@ def register():
     database[accountNumber] = [ first_name, last_name, email, password ]
 
     print("Your Account Has been created")
-    print(" == ==== ====== ===== ===")
+    print("****************************************")
     print("Your account number is: %d" % accountNumber)
     print("Make sure you keep it safe")
-    print(" == ==== ====== ===== ===")
+    print("****************************************")
 
     login()
 
