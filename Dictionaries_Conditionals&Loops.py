@@ -7,7 +7,6 @@ second_dict = dict()
 
 #print(type(first_dict))
 #print(type(second_dict))
-
 fruit_basket = {
     "mango":40,
     "apples":24,
@@ -25,8 +24,12 @@ fruit_basket = {
 # print(f"We have {apples} berry's in the basket")
 
 # #gets all the keys
-# all_fruit_keys = fruit_basket.keys()
-# print(all_fruit_keys)
+all_fruit_keys = fruit_basket.keys()
+print(all_fruit_keys)
+
+for keys, values in fruit_basket.items():
+    if ("mango" == keys) and (40 == values):
+        print(True)
 
 #add new keys and values
 # fruit_basket.update({"berrys":24})
@@ -58,12 +61,16 @@ new_fruit_basket = fruit_basket #This does not copy it only references
 item_i = ["beans", "rice", "yam"]
 item_j = ["stew", "egg", "vegetable"]
 
-for index, item2 in enumerate(item_i):
-    print(f"{index} and {item2}")
+# for index, item2 in enumerate(item_i):
+#     print(f"{index} and {item2}")
 
-for i in item_i:
-    for j in item_j:
-        print(i, " and ", j)
+# for i in item_i:
+#     for j in item_j:
+#         print(i, " and ", j)
 
-for key, value in fruit_basket.items():
-    print(key, " = ", value)
+# for key, value in fruit_basket.items():
+#     print(key, " = ", value)
+
+fruit = "pawpaw"
+values = fruit_basket.get(fruit)
+print(values)
